@@ -39,7 +39,12 @@ fn level_four(data: &Vec<i32>) -> i32 {
     println!("Level 4: Final computation");
     // TODO: Return some computed value from the data
     // Maybe sum of all elements, or product, or some other calculation
-    0
+    let mut result: i32 = 0;
+
+    data.iter().for_each(|x| result += x);
+    println!("Level 4 - solution {}: Final computation", result);
+
+    result
 }
 
 // Mutable reference chain
@@ -62,6 +67,7 @@ fn level_four_mut(data: &mut Vec<i32>) {
     println!("Mutable Level 4: Final modifications");
     // TODO: Modify the data in some way
     // Maybe double all values, or add 1 to each, or reverse
+    data.iter_mut().for_each(|x| *x += 1)
 }
 
 // Bonus: Mixed reference chain
