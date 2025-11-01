@@ -67,7 +67,15 @@ fn level_four_mut(data: &mut Vec<i32>) {
     println!("Mutable Level 4: Final modifications");
     // TODO: Modify the data in some way
     // Maybe double all values, or add 1 to each, or reverse
-    data.iter_mut().for_each(|x| *x += 1)
+
+    for x in data.iter_mut() {
+        *x *= 10    ;
+    }
+
+    println!("Modified data: {:?}", data);
+
+
+
 }
 
 // Bonus: Mixed reference chain
