@@ -1,95 +1,142 @@
+#[derive(Debug)]
+struct ProcessingResult {
+    steps_completed: usize,
+    final_value: i32,
+    modifications_made: usize,
+}
+
 fn main() {
-    println!("=== Reference Chain Demo ===");
+    let mut blockchain_data = vec![100, 250, 75, 300, 150];
 
-    let mut data = vec![1, 2, 3, 4, 5];
+    println!("=== Advanced Reference Chain ===");
+    println!("Initial blockchain data: {:?}", blockchain_data);
 
-    println!("Original data: {:?}", data);
-
-    // Chain of immutable references
-    let result = level_one(&data);
-    println!("Chain result: {}", result);
-
-    // Chain of mutable references
-    level_one_mut(&mut data);
-    println!("After mutable chain: {:?}", data);
-
-    // Original data should still be accessible
-    println!("Final data: {:?}", data);
-}
-
-// TODO: Implement this chain of functions
-// level_one -> level_two -> level_three -> level_four
-
-fn level_one(data: &Vec<i32>) -> i32 {
-    println!("Level 1: Processing {} elements", data.len());
-    level_two(data)
-}
-
-fn level_two(data: &Vec<i32>) -> i32 {
-    println!("Level 2: Finding patterns in data");
-    level_three(data)
-}
-
-fn level_three(data: &Vec<i32>) -> i32 {
-    println!("Level 3: Performing calculations");
-    level_four(data)
-}
-
-fn level_four(data: &Vec<i32>) -> i32 {
-    println!("Level 4: Final computation");
-    // TODO: Return some computed value from the data
-    // Maybe sum of all elements, or product, or some other calculation
-    let mut result: i32 = 0;
-
-    data.iter().for_each(|x| result += x);
-    println!("Level 4 - solution {}: Final computation", result);
-
-    result
-}
-
-// Mutable reference chain
-fn level_one_mut(data: &mut Vec<i32>) {
-    println!("Mutable Level 1: Preparing data");
-    level_two_mut(data);
-}
-
-fn level_two_mut(data: &mut Vec<i32>) {
-    println!("Mutable Level 2: Transforming data");
-    level_three_mut(data);
-}
-
-fn level_three_mut(data: &mut Vec<i32>) {
-    println!("Mutable Level 3: Applying changes");
-    level_four_mut(data);
-}
-
-fn level_four_mut(data: &mut Vec<i32>) {
-    println!("Mutable Level 4: Final modifications");
-    // TODO: Modify the data in some way
-    // Maybe double all values, or add 1 to each, or reverse
-
-    for x in data.iter_mut() {
-        *x *= 10    ;
+    // Complex processing chain
+    match process_blockchain_data(&mut blockchain_data) {
+        Ok(result) => {
+            println!("Processing successful: {:?}", result);
+        },
+        Err(e) => {
+            println!("Processing failed: {}", e);
+        }
     }
 
-    println!("Modified data: {:?}", data);
+    println!("Final blockchain data: {:?}", blockchain_data);
 
-
-
+    // Test reference sharing patterns
+    test_reference_sharing(&blockchain_data);
 }
 
-// Bonus: Mixed reference chain
-fn mixed_chain_start(data: &mut Vec<i32>) -> i32 {
-    // Start with mutable reference, return immutable analysis
-    mixed_chain_modify(data);
-    mixed_chain_analyze(data)
+fn process_blockchain_data(data: &mut Vec<i32>) -> Result<ProcessingResult, String> {
+    // TODO: Implement a complex processing chain that:
+    // 1. Validates data (immutable reference)
+    // 2. Processes transactions (mutable reference)
+    // 3. Calculates metrics (immutable reference)
+    // 4. Applies final adjustments (mutable reference)
+
+    let mut result = ProcessingResult {
+        steps_completed: 0,
+        final_value: 0,
+        modifications_made: 0,
+    };
+
+    // Step 1: Validation
+    validate_data(data)?;
+    result.steps_completed += 1;
+
+    // Step 2: Processing (this should modify data)
+    let mods = process_transactions(data)?;
+    result.modifications_made = mods;
+    result.steps_completed += 1;
+
+    // Step 3: Analysis (read-only)
+    result.final_value = calculate_final_value(data)?;
+    result.steps_completed += 1;
+
+    // Step 4: Final adjustments
+    apply_final_adjustments(data)?;
+    result.steps_completed += 1;
+
+    Ok(result)
 }
 
-fn mixed_chain_modify(data: &mut Vec<i32>) {
-    // TODO: Modify the data
+fn validate_data(data: &Vec<i32>) -> Result<(), String> {
+    // TODO: Validate that data meets requirements
+    // - Not empty
+    if data.len() > 0 {
+        println!("Data NOT empty: {:?}", data );
+    }
+
+    else {
+        println!("Data is EMPTY: {:?}", data );
+    }
+
+
+    // - All values positive
+
+    let positive_values: Vec<i32> = data
+        .iter()       // iterate over &i32
+        .copied()     // turn &i32 into i32
+        .filter(|v| *v > 0)  // keep only positive numbers
+        .collect();   // collect into a Vec<i32>
+
+
+    println!("Positive values: {:?}", positive_values);
+
+
+    // - Within reasonable ranges
+    Ok(())
 }
 
-fn mixed_chain_analyze(data: &Vec<i32>) -> i32 {
-    // TODO: Analyze the data (immutable)
-    0
+fn process_transactions(data: &mut Vec<i32>) -> Result<usize, String> {
+    // TODO: Process and modify the transaction data
+    // Return number of modifications made
+    Ok(0)
+}
+
+fn calculate_final_value(data: &Vec<i32>) -> Result<i32, String> {
+    // TODO: Calculate some final metric from the data
+    Ok(0)
+}
+
+fn apply_final_adjustments(data: &mut Vec<i32>) -> Result<(), String> {
+    // TODO: Apply any final adjustments to the data
+    Ok(())
+}
+
+fn test_reference_sharing(data: &Vec<i32>) {
+    println!("\n=== Reference Sharing Test ===");
+
+    // Multiple immutable references are allowed
+    let ref1 = data;
+    let ref2 = data;
+    let ref3 = data;
+
+    // All can be used simultaneously
+    println!("Ref1 length: {}", ref1.len());
+    println!("Ref2 sum: {}", ref2.iter().sum::<i32>());
+    println!("Ref3 max: {:?}", ref3.iter().max());
+
+    // Test function calls with multiple references
+    compare_references(ref1, ref2);
+}
+
+fn compare_references(data1: &Vec<i32>, data2: &Vec<i32>) {
+    // TODO: Compare two references to the same data
+    // This demonstrates that multiple immutable references work
+    println!("References point to same data: {}",
+             std::ptr::eq(data1, data2));
+}
+
+// Advanced: Function that returns references
+fn find_largest_element(data: &Vec<i32>) -> Option<&i32> {
+    // TODO: Return a reference to the largest element
+    // This demonstrates returning borrowed data
+    None
+}
+
+fn find_elements_above_threshold(data: &Vec<i32>, threshold: i32) -> Vec<&i32> {
+    // TODO: Return references to elements above threshold
+    // This creates a vector of references, not owned values
+    vec![]
 }
